@@ -2,7 +2,10 @@ package com.hamidul.audioplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView song_1,song_2,song_3;
     MediaPlayer mediaPlayer;
+    BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         song_1 = findViewById(R.id.song_1);
         song_2 = findViewById(R.id.song_2);
         song_3 = findViewById(R.id.song_3);
+
+        broadcastReceiver = new InternetConnection();
+        registerNetwork();
         song_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,5 +151,25 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mediaPlayer.release();
         icon();
+    }
+
+    protected void registerNetwork(){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+            registerReceiver(broadcastReceiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    protected void unregisterNetwork(){
+        try {
+            unregisterReceiver(broadcastReceiver);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterNetwork();
     }
 }
