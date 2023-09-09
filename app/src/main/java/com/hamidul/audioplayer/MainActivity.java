@@ -10,6 +10,9 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -18,22 +21,32 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     ImageView song_1,song_2,song_3;
+    ImageView image1,image2,image3;
     MediaPlayer mediaPlayer;
     BroadcastReceiver broadcastReceiver;
+    Animation custom_animation,zoom_in;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
 
         song_1 = findViewById(R.id.song_1);
         song_2 = findViewById(R.id.song_2);
         song_3 = findViewById(R.id.song_3);
+        image1 = findViewById(R.id.image1);
+        image2 = findViewById(R.id.image2);
+        image3 = findViewById(R.id.image3);
+        custom_animation = AnimationUtils.loadAnimation(MainActivity.this,R.anim.custom_animation);
+        zoom_in = AnimationUtils.loadAnimation(MainActivity.this,R.anim.zoom_in);
 
         broadcastReceiver = new InternetConnection();
         registerNetwork();
         song_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (song_1.getTag()!=null && song_1.getTag().toString().contains("Play")){
                     if (mediaPlayer!=null) mediaPlayer.release();
                     mediaPlayer = new MediaPlayer();
