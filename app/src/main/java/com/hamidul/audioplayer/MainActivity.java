@@ -15,6 +15,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.thekhaeng.pushdownanim.PushDownAnim;
 
 import java.io.IOException;
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     BroadcastReceiver broadcastReceiver;
     Animation custom_animation,zoom_in;
+    LinearLayout push;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
         image1 = findViewById(R.id.image1);
         image2 = findViewById(R.id.image2);
         image3 = findViewById(R.id.image3);
+        push = findViewById(R.id.push);
+
+
+        PushDownAnim.setPushDownAnimTo(song_1,song_2,song_3)
+                .setScale(PushDownAnim.MODE_SCALE,0.80f);
+
         custom_animation = AnimationUtils.loadAnimation(MainActivity.this,R.anim.custom_animation);
         zoom_in = AnimationUtils.loadAnimation(MainActivity.this,R.anim.zoom_in);
 
@@ -50,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 if (song_1.getTag()!=null && song_1.getTag().toString().contains("Play")){
                     if (mediaPlayer!=null) mediaPlayer.release();
                     mediaPlayer = new MediaPlayer();
+
                     try {
                         mediaPlayer.setDataSource("https://smhamidulcodding.000webhostapp.com/mp3/Alone_Sad_Ringtone.mp3");
                         mediaPlayer.prepare();
